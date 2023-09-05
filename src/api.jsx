@@ -11,3 +11,11 @@ export const getArticleById = (id) => {
         return response.data.article;
       });
   };
+
+  export const getCommentByArticleById = (id) => {
+    return axios
+      .get(`https://leos-news-outlet.onrender.com/api/articles/${id}/comments`)
+      .then((response) => {
+        return response.data;
+      });
+  };

@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getArticleById } from "../../api";
+import Comments from "./Comment/Comments";
 
 const SingleArticle = () => {
   const { article_id } = useParams();
@@ -42,7 +43,9 @@ const SingleArticle = () => {
           <p className="article-body">{article.body}</p>
         </section>
       </section>
-      <section>Placeholder for comments section</section>
+      <section>
+      <Comments article_id={article_id}/> 
+        </section>
     </section>
   );
 };
