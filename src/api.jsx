@@ -19,3 +19,10 @@ export const getArticleById = (id) => {
         return response.data;
       });
   };
+
+  export const patchArticleVotes = (id, num) => {
+    return axios.patch(
+      `https://leos-news-outlet.onrender.com/api/articles/${id}`,
+      { inc_votes: num }
+    );
+  };

@@ -1,14 +1,19 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getArticleById } from "../../api";
+import { getArticleById, patchArticleVotes} from "../../api";
 import Comments from "./Comment/Comments";
+import ArticleButton from "./ArticleButton";
+
 
 const SingleArticle = () => {
   const { article_id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [article, setArticle] = useState({});
+  const [isVoteError, setIsVoteError] = useState(null);
+  const [isLikeClicked, setIsLikeClicked] = useState(false);
+  const [isDislikeClicked, setIsDislikeClicked] = useState(false);
   useEffect(() => {
     getArticleById(article_id)
       .then((data) => {
@@ -21,6 +26,26 @@ const SingleArticle = () => {
         setIsLoading(false);
       });
   }, []);
+  const addLike = (article, num) => {
+    const copyArticle = { ...article };
+    copyArticle.votes++;
+    setArticle(copyArticle);
+    setIsVoteError(null);
+    console.log(isVoteError);
+    patchArticleVotes(article.article_id, num).catch((error) => {
+      setIsVoteError("Something went wrong. Please try again");
+    });
+  };
+
+  const takeLike = (article, num) => {
+    const copyArticle = { ...article };
+    copyArticle.votes--;
+    setArticle(copyArticle);
+    setIsVoteError(null);
+    patchArticleVotes(article.article_id, num).catch((error) => {
+      setIsVoteError("Something went wrong. Please try again");
+    });
+  };
 
   if (isLoading) return <h1>Loading...</h1>;
   if (isError) return <h1>Error. Please try again with valid article id</h1>;
@@ -37,6 +62,15 @@ const SingleArticle = () => {
           src={article.article_img_url}
           alt={article.title}
         ></img>
+         <div>
+          <p>Votes: {article.votes}</p>
+          <ArticleButton
+            article={article}
+            setIsVoteError={setIsVoteError}
+            setArticle={setArticle}
+          />
+          {isVoteError ? <p>{isVoteError}</p> : null}
+        </div>
         <p>Votes: {article.votes}</p>
         <section className="article-bulk">
           <h3>By {article.author}</h3>

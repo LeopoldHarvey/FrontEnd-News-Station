@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { getArticles } from "../../api";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Articles = () => {
   const [total, setTotal] = useState(0);
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isVoteError, setIsVoteError] = useState(null);
 
   const navigate = useNavigate();
   const navigateToArticle = (id) => {
@@ -37,17 +39,19 @@ const Articles = () => {
         {articles.map((article) => {
           return (
             <li
-                      key={article.article_id}
-            className="article"
+             
             onClick={() => {
               navigateToArticle(article.article_id);
             }}
+            key={article.article_id}
+            className="article"
           >
-              <h2 className="article-title">{article.title}</h2>
-              <h4>
-                {article.topic.slice(0, 1).toUpperCase() +
-                  article.topic.slice(1)}
-              </h4>
+            <Link
+                to={`/articles/${article.article_id}`}
+                className="article-title"
+              >
+                <h2>{article.title}</h2>
+              </Link>
               <div className="article-info">
                 <div className="creation-facts">
                   <p className="article-author">{article.author}</p>
