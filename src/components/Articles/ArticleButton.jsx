@@ -3,8 +3,8 @@ import { useState } from "react";
 import { patchArticleVotes } from "../../api";
 
 const ArticleButton = ({ article, setIsVoteError, setArticle }) => {
-  const [isDislikeButton, setIsLikeButtonisDislikeButton] = useState(false);
-  const [isDislikeButtonisDislikeButton, setIsDislikeButtonisDislikeButton] = useState(false);
+  const [isLikeButton, setIsLikeButton] = useState(false);
+  const [isDislikeButton, setIsDislikeButton] = useState(false);
 
   const changeLike = (article, num, button) => {
     const copyArticle = { ...article };
@@ -18,9 +18,9 @@ const ArticleButton = ({ article, setIsVoteError, setArticle }) => {
     patchArticleVotes(article.article_id, num)
       .then(() => {
         if (button === "like") {
-          setIsLikeButtonisDislikeButton(!isDislikeButton);
+          setIsLikeButton(!isLikeButton);
         } else {
-          setIsDislikeButtonisDislikeButton(!isDislikeButtonisDislikeButton);
+          setIsDislikeButton(!isDislikeButton);
         }
       })
       .catch((error) => {
@@ -30,10 +30,10 @@ const ArticleButton = ({ article, setIsVoteError, setArticle }) => {
   return (
     <div>
       <button
-        disabled={isDislikeButtonisDislikeButton}
-        className={isDislikeButton ? "clicked-like" : null}
+        disabled={isDislikeButton}
+        className={isLikeButton ? "clicked-like" : null}
         onClick={() => {
-          if (isDislikeButton) {
+          if (isLikeButton) {
             changeLike(article, -1, "like");
           } else {
             changeLike(article, 1, "like");
@@ -43,10 +43,10 @@ const ArticleButton = ({ article, setIsVoteError, setArticle }) => {
         Like
       </button>
       <button
-        className={isDislikeButtonisDislikeButton ? "clicked-dislike" : null}
-        disabled={isDislikeButton}
+        className={isDislikeButton ? "clicked-dislike" : null}
+        disabled={isLikeButton}
         onClick={() => {
-          if (isDislikeButtonisDislikeButton) {
+          if (isDislikeButton) {
             changeLike(article, 1, "dislike");
           } else {
             changeLike(article, -1, "dislike");
