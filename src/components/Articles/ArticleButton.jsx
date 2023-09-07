@@ -3,93 +3,53 @@ import { useState } from "react";
 import { patchArticleVotes } from "../../api";
 
 const ArticleButton = ({ article, setIsVoteError, setArticle }) => {
-  const [isLikedButton, setIsLikedButton] = useState(false);
-
+  const [isLikeButton, setIsLikeButton] = useState(false);
   const [isDislikeButton, setIsDislikeButton] = useState(false);
 
-  const addLike = (article, num) => {
+  const changeLike = (article, num, button) => {
     const copyArticle = { ...article };
-    copyArticle.votes++;
+    if (num === 1) {
+      copyArticle.votes++;
+    } else {
+      copyArticle.votes--;
+    }
     setArticle(copyArticle);
-
     setIsVoteError(null);
     patchArticleVotes(article.article_id, num)
       .then(() => {
-        setIsLikedButton(true);
-      })
-
-      .catch((error) => {
-        setIsVoteError("Something went wrong. Please try again");
-      });
-  };
-
-  const removeAddedLike = (article, num) => {
-    const copyArticle = { ...article };
-    copyArticle.votes--;
-    setArticle(copyArticle);
-    setIsVoteError(null);
-
-    patchArticleVotes(article.article_id, num)
-      .then(() => {
-        setIsLikedButton(false);
+        if (button === "like") {
+          setIsLikeButton(!isLikeButton);
+        } else {
+          setIsDislikeButton(!isDislikeButton);
+        }
       })
       .catch((error) => {
         setIsVoteError("Something went wrong. Please try again");
       });
   };
-
-  const removeTakenLike = (article, num) => {
-    const copyArticle = { ...article };
-    copyArticle.votes++;
-    setArticle(copyArticle);
-    setIsVoteError(null);
-    patchArticleVotes(article.article_id, num)
-      .then(() => {
-        setIsDislikeButton(false);
-      })
-
-      .catch((error) => {
-        setIsVoteError("Something went wrong. Please try again");
-      });
-  };
-
-  const takeLike = (article, num) => {
-    const copyArticle = { ...article };
-    copyArticle.votes--;
-    setArticle(copyArticle);
-    setIsVoteError(null);
-    patchArticleVotes(article.article_id, num)
-      .then(() => {
-        setIsDislikeButton(true);
-      })
-      .catch((error) => {
-        setIsVoteError("Something went wrong. Please try again");
-      });
-  };
-
   return (
     <div>
       <button
         disabled={isDislikeButton}
-        className={isLikedButton ? "likeButton" : null}
+        className={isLikeButton ? "clicked-like" : null}
         onClick={() => {
-          if (isLikedButton) {
-            removeAddedLike(article, -1);
+          if (isLikeButton) {
+            changeLike(article, -1, "like");
           } else {
-            addLike(article, 1);
+            changeLike(article, 1, "like");
           }
         }}
       >
         Like
       </button>
       <button
-        className={isDislikeButton ? "dislikeButton" : null}
-        disabled={isLikedButton}
+        className={isDislikeButton ? "clicked-dislike" : null}
+        disabled={isLikeButton}
         onClick={() => {
           if (isDislikeButton) {
-            removeTakenLike(article, 1);
+            changeLike(article, 1, "dislike");
           } else {
-            takeLike(article, -1);
+            changeLike(article, -1, "dislike");
           }
         }}
       >
@@ -98,5 +58,4 @@ const ArticleButton = ({ article, setIsVoteError, setArticle }) => {
     </div>
   );
 };
-
 export default ArticleButton;
