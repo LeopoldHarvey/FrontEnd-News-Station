@@ -24,3 +24,14 @@ ul.Nav > li {
 
   background-color: rgba(00, 00, 00, 0.2);
 }
+
+.comments {
+  list-style-type: none;
+}
+
+#comment-form-input {
+  width: 95%;
+  height: 200px;
+  font-size: 1.5em;
+  resize: none;
+}

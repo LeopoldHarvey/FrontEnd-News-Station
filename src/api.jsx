@@ -26,3 +26,15 @@ export const getArticleById = (id) => {
       { inc_votes: num }
     );
   };
+
+
+  export const postCommentByArticleId = (id, user, body) => {
+    return axios
+      .post(`https://leos-news-outlet.onrender.com/api/articles/${id}/comments`, {
+        username: user,
+        body,
+      })
+      .then((response) => {
+        return response.data;
+      });
+  };
