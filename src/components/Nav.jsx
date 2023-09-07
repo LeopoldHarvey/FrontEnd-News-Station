@@ -10,7 +10,6 @@ const Nav = () => {
             <li>
               <Link to="/articles">Articles</Link>
             </li>
-            <li>User</li>
           </ul>
     
       );

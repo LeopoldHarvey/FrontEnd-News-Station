@@ -7,7 +7,6 @@ const MakeComment = ({ article_id, comments, setComments }) => {
     const [formInput, setFormInput] = useState("");
     const [isSubmitError, setIsSubmitError] = useState(false);
     const [isSubmitSuccess, setIsSubmitSuccess] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
   
     const handleChange = (event) => {
       setFormInput(event.target.value);
@@ -41,7 +40,6 @@ const MakeComment = ({ article_id, comments, setComments }) => {
       
     };
   
-    if (isLoading) return <h3>Loading...</h3>;
   
     return (
       <div className="comment-form">
